@@ -18,32 +18,42 @@ const Board = () => {
     ];
     for (let logic of winnerLogic) {
       const [a, b, c] = logic;
-      if (state[a] !== null && state[a] === state[b] && state[a] === state[c]) {
-        return state[a]; 
+      if (state[a] && state[a] === state[b] && state[a] === state[c]) {
+        return state[a]; // return 'X' or 'O'
       }
     }
-    return null; 
+    return null;
   };
 
   const winner = checkWinner();
 
-  function handleClick(index) {
-    
+  const handleClick = (index) => {
     if (winner || state[index]) return;
 
     const copyState = [...state];
     copyState[index] = isXTurn ? "X" : "O";
     setState(copyState);
     setIsXturn(!isXTurn);
-  }
+  };
+
+  const handleReset = () => {
+    setState(Array(9).fill(null));
+    setIsXturn(true);
+  };
 
   return (
     <div className="board-container">
       {winner ? (
-        <h2>Winner is {winner} 🎉</h2>
+        <>
+          <h2>Winner is {winner} 🎉</h2>
+          <button className="play-again-btn" onClick={handleReset}>
+            🔁 Play Again
+          </button>
+        </>
       ) : (
         <h3>Current Turn: {isXTurn ? "X" : "O"}</h3>
       )}
+
       <div className="board-row">
         <Square onClick={() => handleClick(0)} value={state[0]} />
         <Square onClick={() => handleClick(1)} value={state[1]} />
